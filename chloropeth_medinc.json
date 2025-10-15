@@ -1,0 +1,37 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#66b2ff",
+  "title": "Median Household Income by State, Malaysia (2022)",
+  "width": 700,
+  "height": 520,
+  "projection": { "type": "mercator" },
+  "data": {
+    "url": "malaysia_states.json",
+    "format": { "type": "topojson", "feature": "ne_10m_admin_1_states_provinces" }
+  },
+  "transform": [
+    {
+      "lookup": "properties.name",
+      "from": {
+        "data": { "url": "income.csv" },
+        "key": "state",
+        "fields": ["date", "income_median", "income_mean"]
+      }
+    },
+    { "filter": "datum.date == '2022-01-01'" }
+  ],
+  "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 1 },
+  "encoding": {
+    "color": {
+      "field": "income_median",
+      "type": "quantitative",
+      "title": "Median Household Income (RM)",
+      "scale": { "scheme": "blues" }
+    },
+    "tooltip": [
+      { "field": "properties.name", "title": "State" },
+      { "field": "income_median", "title": "Median Income (RM)" },
+      { "field": "income_mean", "title": "Mean Income (RM)" }
+    ]
+  }
+}

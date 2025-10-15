@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIT3179 Data Visualisation 2: Can Malaysian Households Keep Up?</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
+    
+    <style>
+        /* General Body and Container Styles */
+        body {
+            font-family: 'Open Sans', sans-serif; /* Body font as planned */
+            color: #444;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7; /* Neutral grey background as planned */
+        }
+        
+        /* Layout and Scrolling Requirement: Max width for small laptop screens */
+        .container {
+            width: 90%;
+            max-width: 960px; /* Ensures no horizontal scroll on small laptops [cite: 77] */
+            margin: auto;
+            padding: 2em 0;
+        }
+
+        /* Typography Styles (Garamond for Title, Open Sans for Body) [cite: 88] */
+        .title-section h1 {
+            font-family: 'Garamond', serif;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #0d47a1; /* Dark Blue for title/branding */
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.2em;
+        }
+        .title-section h2 {
+            font-size: 1.2em;
+            color: #777;
+            margin-bottom: 2em;
+        }
+
+        /* Section Headings (H2 for narrative flow) */
+        .vis-section h3 {
+            font-family: 'Garamond', serif;
+            font-size: 1.7em;
+            color: #333;
+            margin-top: 1.5em;
+            border-left: 5px solid #0d47a1; /* Visual mark for new section */
+            padding-left: 10px;
+        }
+
+        /* Placeholder for Visualization Containers */
+        .vis-container {
+            margin: 2em 0;
+            background: #fff;
+            padding: 1.5em;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Figure-ground effect [cite: 38] */
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+</head>
+<body>
+
+    <div class="container">
+
+        <header class="title-section">
+            <h1>Can Malaysian Households Keep Up?</h1>
+            <h2>Exploring how income, prices, and inequality shape life across the nation.</h2>
+            <p>
+                Over the past decade, Malaysians have seen incomes rise -- but so have prices and inequality. This dashboard explores where incomes are highest, whether they're keeping pace with living costs, and what factors may explain the growing divide between states.
+            </p>
+            <hr>
+            <p>
+                <small>Author: [Your Name] | Date: [Current Date] | Data Sources: Department of Statistics Malaysia (HIES 2012-2022, CPI index, Gini coefficients, education rates) and others. [cite: 93, 95]</small>
+            </p>
+        </header>
+
+
+        <section class="vis-section">
+            <h3 id="section1">1. Where are incomes highest and lowest in Malaysia?</h3>
+            <p>Let's see how income is distributed today.</p>
+
+            <div class="vis-container">
+                <div id="vis1_map"></div> 
+            </div>
+        </section>
+
+
+        <section class="vis-section">
+            <h3 id="section2">2. How have incomes shifted across time and space?</h3>
+            <p>But has this changed much over time?</p>
+
+            <div class="vis-container">
+                <div id="vis2_small_multiples"></div> 
+            </div>
+            <p>
+                Caption: Penang and Selangor grew fastest, while Kelantan and Sabah lagged.
+            </p>
+        </section>
+
+        <footer>
+            <hr>
+            <p style="text-align: center; font-size: 0.8em;">
+                This data visualisation was created for FIT3179 Data Visualisation 2, Monash University. [cite: 1] <br>
+                Please find the <a href="[Your GitHub URL]/fivedesignsheets.pdf" target="_blank">Five Design Sheets (PDF)</a> and all <a href="[Your GitHub URL]/vega_lite_specs/" target="_blank">Vega-Lite JSON specifications</a> in the GitHub repository.
+            </p>
+        </footer>
+
+    </div>
+    
+    <script>
+        // Store your Vega-Lite JSON specifications in a separate folder (e.g., 'vega_lite_specs') 
+        // as required by the assignment[cite: 20].
+
+        // 1️⃣ Render the Choropleth Map (VISUALISATION 1)
+        const spec1_url = 'chloropeth_medinc.json';
+
+        vegaEmbed('#vis1_map', spec1_url, { actions: false })
+            .then(result => console.log('Map rendered successfully'))
+            .catch(error => console.error('Error rendering map:', error));
+
+        // 2️⃣ Render the Small-Multiples Map (VISUALISATION 2)
+        // const spec2_url = 'vega_lite_specs/vis2_small_multiples.json';
+        // vegaEmbed('#vis2_small_multiples', spec2_url, { actions: false })
+        //     .catch(error => console.error('Error rendering small multiples:', error));
+
+    </script>
+
+</body>
+</html>
