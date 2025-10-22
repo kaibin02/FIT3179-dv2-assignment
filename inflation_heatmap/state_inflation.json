@@ -42,7 +42,7 @@
         "color": {
           "field": "inflation_yoy_pct",
           "type": "quantitative",
-          "title": "Inflation Rate (%)",
+          "title": "Inflation %",
           "scale": {
             "domain": [-2, 0, 8],
             "range": ["#2166ac", "#f7f7f7", "#b2182b"],
