@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Real Median Income by State Over Time (Adjusted for Inflation)",
+  "width": 350,
+  "height": 350,
+  "params": [
+    {
+      "name": "selectedState",
+      "value": ""
+    }
+  ],
+  "data": {
+    "url": "../income_cpi_analysis.csv"
+  },
+  "transform": [
+    {
+      "aggregate": [{
+        "op": "mean",
+        "field": "income_median_real",
+        "as": "median_income_agg"
+      }],
+      "groupby": ["state", "year"]
+    },
+    {
+      "calculate": "datum.median_income_agg",
+      "as": "income_median_real"
+    },
+    {
+      "window": [{
+        "op": "first_value",
+        "field": "median_income_agg",
+        "as": "latest_income"
+      }],
+      "groupby": ["state"],
+      "sort": [{"field": "year", "order": "descending"}]
+    }
+  ],
+  "mark": {
+    "type": "rect",
+    "stroke": "#fff",
+    "strokeWidth": 0.5,
+    "cursor": "pointer"
+  },
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "nominal",
+      "sort": {"field": "latest_income", "order": "descending"},
+      "title": "State"
+    },
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": "Year",
+      "sort": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
+    },
+    "fill": {
+      "field": "income_median_real",
+      "type": "quantitative",
+      "title": "Real Median Income (RM)",
+      "scale": {
+        "scheme": "blues",
+        "domainMin": 0,
+        "nice": true
+      }
+    },
+    "opacity": {
+      "condition": {
+        "test": "selectedState === '' || datum.state === selectedState",
+        "value": 1
+      },
+      "value": 0.3
+    },
+    "stroke": {"value": "#fff"},
+    "strokeWidth": {"value": 0.5},
+    "tooltip": [
+      {"field": "state", "type": "nominal", "title": "State"},
+      {"field": "year", "type": "ordinal", "title": "Year"},
+      {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+    ]
+  },
+  "config": {
+    "view": {"stroke": null}
+  }
+}

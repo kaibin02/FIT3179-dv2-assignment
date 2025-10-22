@@ -1,137 +1,853 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIT3179 Data Visualisation 2: Can Malaysian Households Keep Up?</title>
-
-    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
-    
-    <style>
-        /* General Body and Container Styles */
-        body {
-            font-family: 'Open Sans', sans-serif; /* Body font as planned */
-            color: #444;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f7f7; /* Neutral grey background as planned */
-        }
-        
-        /* Layout and Scrolling Requirement: Max width for small laptop screens */
-        .container {
-            width: 90%;
-            max-width: 960px; /* Ensures no horizontal scroll on small laptops [cite: 77] */
-            margin: auto;
-            padding: 2em 0;
-        }
-
-        /* Typography Styles (Garamond for Title, Open Sans for Body) [cite: 88] */
-        .title-section h1 {
-            font-family: 'Garamond', serif;
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #0d47a1; /* Dark Blue for title/branding */
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 0.2em;
-        }
-        .title-section h2 {
-            font-size: 1.2em;
-            color: #777;
-            margin-bottom: 2em;
-        }
-
-        /* Section Headings (H2 for narrative flow) */
-        .vis-section h3 {
-            font-family: 'Garamond', serif;
-            font-size: 1.7em;
-            color: #333;
-            margin-top: 1.5em;
-            border-left: 5px solid #0d47a1; /* Visual mark for new section */
-            padding-left: 10px;
-        }
-
-        /* Placeholder for Visualization Containers */
-        .vis-container {
-            margin: 2em 0;
-            background: #fff;
-            padding: 1.5em;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Figure-ground effect [cite: 38] */
-        }
-    </style>
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Malaysia Household Income Analysis (2012-2022)</title>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+      body { 
+        font-family: system-ui, Arial, sans-serif; 
+        margin: 0; 
+        padding: 0;
+        background: url('money.png') repeat;
+        color: #333;
+        min-height: 100vh;
+      }
 
-</head>
-<body>
+      .analysis-grid {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
 
-    <div class="container">
+      .analysis-row {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 3rem;
+        align-items: center;
+      }
 
-        <header class="title-section">
-            <h1>Can Malaysian Households Keep Up?</h1>
-            <h2>Exploring how income, prices, and inequality shape life across the nation.</h2>
-            <p>
-                Over the past decade, Malaysians have seen incomes rise -- but so have prices and inequality. This dashboard explores where incomes are highest, whether they're keeping pace with living costs, and what factors may explain the growing divide between states.
-            </p>
-            <hr>
-            <p>
-                <small>Author: [Your Name] | Date: [Current Date] | Data Sources: Department of Statistics Malaysia (HIES 2012-2022, CPI index, Gini coefficients, education rates) and others. [cite: 93, 95]</small>
-            </p>
-        </header>
+      .analysis-row.reverse {
+        flex-direction: row-reverse;
+      }
 
+      .viz-container {
+        flex: 1;
+        min-width: 0;
+      }
 
-        <section class="vis-section">
-            <h3 id="section1">1. Where are incomes highest and lowest in Malaysia?</h3>
-            <p>Let's see how income is distributed today.</p>
+      .text-content {
+        flex: 1;
+        padding: 1rem;
+      }
 
-            <div class="vis-container">
-                <div id="vis1_map"></div> 
+      .analysis-text {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .observation-list {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .description-text, .insight-text {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      h4 {
+        color: #333;
+        margin: 1rem 0 0.5rem;
+        font-size: 1.1em;
+      }
+
+      #slopechart, #inflation-heatmap {
+        width: 100%;
+        height: 400px;
+        margin: 0 auto;
+      }
+
+      .viz-container {
+        flex: 0 0 70%;
+        min-width: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .text-content {
+        flex: 0 0 25%;
+        min-width: 250px;
+        padding: 1rem;
+      }
+
+      #slopechart, #inflation-heatmap {
+        width: 100%;
+        height: 400px;
+      }
+
+      .map-section {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 1400px;
+        border-radius: 8px;
+      }
+
+      .map-container {
+        margin-bottom: 2rem;
+      }
+
+      #choropleth_real {
+        width: 100%;
+        height: 500px;
+      }
+
+      #histogram {
+        width: 100%;
+        height: 300px;
+        margin: 1rem 0;
+      }
+
+      .analysis-grid {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem;
+        margin: 2rem auto;
+        max-width: 1400px;
+        border-radius: 8px;
+      }
+
+      .analysis-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding: 1rem;
+      }
+
+      @media (max-width: 1200px) {
+        .analysis-row {
+          flex-direction: column !important;
+          gap: 2rem;
+        }
+
+        .viz-container, .text-content {
+          flex: none !important;
+          width: 100% !important;
+          min-width: 0 !important;
+        }
+
+        #slopechart, #inflation-heatmap {
+          height: 350px;
+        }
+      }
+
+      .analysis-row {
+        justify-content: center;
+        padding: 2rem;
+        align-items: center;
+        gap: 3rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .analysis-grid {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        margin: 2rem auto;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .section-divider {
+        text-align: center;
+        padding: 2rem 0;
+        background: rgba(255, 255, 255, 0.9);
+        margin: 2rem 0;
+      }
+
+      .section-divider h2 {
+        margin: 0;
+        color: #2c3e50;
+      }
+
+      @media (max-width: 1200px) {
+        .analysis-row {
+          flex-direction: column !important;
+          gap: 2rem;
+        }
+
+        .viz-container, .text-content {
+          flex: none !important;
+          width: 100% !important;
+          min-width: 0 !important;
+        }
+
+        #slopechart, #inflation-heatmap {
+          height: 350px;
+        }
+      }
+      .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+      .explanatory-text {
+        max-width: 1000px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+      .explanatory-text h3 {
+        color: #2c3e50;
+        margin: 1.5rem 0 1rem;
+      }
+      .explanatory-text p {
+        margin-bottom: 1rem;
+        text-align: justify;
+      }
+      .two-column-text {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .two-column-text .column {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .two-column-text #histogram {
+        width: 100%;
+        margin: 1rem 0;
+        order: 2;
+      }
+
+      .map-container {
+        margin-bottom: 2rem;
+      }
+
+      #choropleth_real {
+        width: 100%;
+        height: 500px;
+      }
+      .two-column-text p {
+        margin-bottom: 1.5rem;
+      }
+      .visualization-conclusion {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+        column-span: all;
+      }
+      .conclusion-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .header {
+        text-align: center;
+        padding: 2rem 1rem;
+      }
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      .header p {
+        font-size: 1.2rem;
+        color: #666;
+        margin: 0;
+      }
+      .two-columns {
+        column-count: 2;
+        column-gap: 2rem;
+        margin: 2rem 0;
+        text-align: justify;
+      }
+      .map-section {
+        margin-bottom: 3rem;
+      }
+      .map-container {
+        margin-bottom: 2rem;
+      }
+      .intro-text {
+        margin: 2rem auto;
+        max-width: 1000px;
+        line-height: 1.6;
+        color: #2c3e50;
+        text-align: justify;
+      }
+      .intro-text p {
+        margin-bottom: 1rem;
+      }
+      .page-wrapper {
+        background: rgba(255, 255, 255, 0.95);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      section {
+        margin: 2rem 0;
+      }
+      h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+      }
+      h3 {
+        color: #34495e;
+        margin-bottom: 1rem;
+      }
+      #choropleth, #heatmap, #bumpchart, #slopechart, #smallmultiples, #scatterplot, #histogram, #inflation-heatmap, #lollipop { 
+        width: 100%;
+        height: 500px;
+        margin: 1rem auto;
+      }
+      #error { 
+        color: #e74c3c;
+        margin: .5rem 0;
+        padding: 1rem;
+        border-radius: 4px;
+        background: #fadbd8;
+        display: none;
+      }
+      .section-divider {
+        border-top: 2px solid #eee;
+        margin: 4rem 0;
+        position: relative;
+      }
+      .section-divider h2 {
+        position: absolute;
+        top: -1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        padding: 0 2rem;
+        color: #2c3e50;
+      }
+      .temporal-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 2rem 0;
+        max-width: 100%;
+      }
+      .viz-container {
+        width: 100%;
+        overflow: hidden;
+      }
+      #heatmap, #bumpchart {
+        width: 100% !important;
+        max-width: 450px !important;
+        margin: 0 auto;
+      }
+      .multiples-section {
+        margin: 3rem 0;
+      }
+      .multiples-content {
+        display: grid;
+        grid-template-columns: 55% 45%;
+        gap: 2rem;
+        align-items: start;
+      }
+      .multiples-text {
+        min-width: 300px;
+      }
+      .multiples-text {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        height: 100%;
+      }
+      .text-content {
+        position: sticky;
+        top: 2rem;
+      }
+      .description-text {
+        font-size: 0.95em;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        color: #2c3e50;
+      }
+      .observation-list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 1rem 0;
+      }
+      .observation-list li {
+        margin-bottom: 1rem;
+        padding-left: 1.2em;
+        position: relative;
+        line-height: 1.5;
+        font-size: 0.95em;
+        color: #34495e;
+      }
+      .observation-list li:before {
+        content: "*";
+        position: absolute;
+        left: 0;
+        color: #3498db;
+      }
+      .insight-text {
+        font-size: 0.95em;
+        line-height: 1.6;
+        color: #2c3e50;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e0e0e0;
+      }
+      .multiples-text h4 {
+        color: #2c3e50;
+        margin: 1.5rem 0 0.75rem;
+        font-size: 1.1em;
+      }
+      .state-selection {
+        text-align: center;
+        margin: 1rem 0 2rem;
+      }
+      .state-selection select {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background: white;
+        min-width: 200px;
+      }
+      .state-selection label {
+        margin-right: 1rem;
+        color: #2c3e50;
+        font-weight: 500;
+      }
+      .viz-caption {
+        color: #666;
+        font-size: 0.9em;
+        margin: 0.5rem 0 1.5rem;
+        font-style: italic;
+      }
+      .temporal-analysis-container {
+        margin: 2rem 0;
+      }
+      .viz-description {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+        margin-top: 1rem;
+      }
+      .viz-description h4 {
+        color: #2c3e50;
+        margin: 1rem 0 0.5rem;
+        font-size: 1.1em;
+      }
+      .viz-description p {
+        font-size: 0.95em;
+        line-height: 1.5;
+        color: #4a4a4a;
+        margin-bottom: 1rem;
+      }
+      .viz-container {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <div class="container">
+        <div class="header">
+          <h1>Malaysia's Changing Household Income and Purchasing Power (2012-2022)</h1>
+          <p>Exploring how real incomes vary across states once inflation is accounted for.</p>
+        </div>
+        <div class="intro-text">
+          <p>The Consumer Price Index (CPI) and median household income are key indicators of Malaysia's financial well-being. The CPI tracks changes in the overall cost of living - how much prices have risen for common goods and services - while the median household income represents the midpoint of all household earnings, providing a better view of the "typical" family than the mean, which can be distorted by outliers.</p>
+          <p>To compare living standards fairly over time, the median incomes are adjusted for inflation using the CPI. This process converts nominal values (actual ringgit earned) into real median income, expressed in constant 2010 prices. Real income therefore reflects what households can actually buy, removing the effect of rising prices. In other words, if nominal income increases but inflation rises faster, purchasing power - and thus quality of life - falls.</p>
+        </div>
+
+        <div class="map-section">
+          <h2>Regional Overview - Real Household Income in 2022</h2>
+          <div class="map-container">
+            <div id="choropleth_real"></div>
+          </div>
+          <div class="content-wrapper">
+            <div class="explanatory-text">
+              <div class="two-column-text">
+                <div class="column">
+                  <h3>Understanding Real Median Income</h3>
+                  <p>Real median income reflects the true purchasing power of Malaysian households after adjusting for inflation. The original income data from DOSM's Household Income and Basic Amenities Survey records nominal median income - the middle household income value in each state. However, nominal figures can be misleading, as they rise with general price increases.</p>
+                </div>
+                <div id="histogram"></div>
+                <div class="column">
+                  <h3>Spatial Distribution</h3>
+                  <p>The choropleth map above visualises real median income by state in 2022. Darker shades represent higher purchasing power. We can immediately observe strong regional inequality: Selangor, W.P. Kuala Lumpur, and Putrajaya form a high-income cluster, each exceeding RM 7,000 in real median income, while states in the East Coast and Northern regions - particularly Kelantan, Perlis, and Kedah - remain below RM 4,000.</p>
+                </div>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
+      <div class="section-divider">
+        <h2>Trends over Time (2012-2022)</h2>
+      </div>
+      
+      <section class="temporal-analysis">
+        <div class="state-selection">
+          <label for="globalStateSelect">Focus on a state:</label>
+          <select id="globalStateSelect">
+            <option value="">View All States</option>
+            <option value="Johor">Johor</option>
+            <option value="Kedah">Kedah</option>
+            <option value="Kelantan">Kelantan</option>
+            <option value="Melaka">Melaka</option>
+            <option value="Negeri Sembilan">Negeri Sembilan</option>
+            <option value="Pahang">Pahang</option>
+            <option value="Perak">Perak</option>
+            <option value="Perlis">Perlis</option>
+            <option value="Pulau Pinang">Pulau Pinang</option>
+            <option value="Sabah">Sabah</option>
+            <option value="Sarawak">Sarawak</option>
+            <option value="Selangor">Selangor</option>
+            <option value="Terengganu">Terengganu</option>
+            <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
+            <option value="W.P. Labuan">W.P. Labuan</option>
+            <option value="W.P. Putrajaya">W.P. Putrajaya</option>
+          </select>
+        </div>
 
-        <section class="vis-section">
-            <h3 id="section2">2. How have incomes shifted across time and space?</h3>
-            <p>But has this changed much over time?</p>
-
-            <div class="vis-container">
-                <div id="vis2_small_multiples"></div> 
+        <!-- First row: Heatmap and Bump Chart side by side -->
+        <div class="viz-row">
+          <div class="viz-col">
+            <h3>Real Income Evolution</h3>
+            <p class="viz-caption">Darker shades indicate higher real median income. Click on a state to highlight.</p>
+            <div id="heatmap"></div>
+            <div class="viz-description">
+              <h4>Description</h4>
+              <p>This heatmap shows the evolution of each state's real median income from 2012 to 2022. Darker shades indicate higher purchasing power, revealing consistent patterns where urban states like Kuala Lumpur and Selangor maintain higher real incomes, while states like Kelantan and Sabah show persistently lower values.</p>
+              <h4>Key Insights</h4>
+              <ul>
+                <li>Urban states consistently maintain higher purchasing power</li>
+                <li>East Coast states show slower real income growth</li>
+                <li>The income gap between regions persists over time</li>
+              </ul>
             </div>
-            <p>
-                Caption: Penang and Selangor grew fastest, while Kelantan and Sabah lagged.
-            </p>
-        </section>
+          </div>
+          
+          <div class="viz-col">
+            <h3>State Rankings Over Time</h3>
+            <p class="viz-caption">Tracking position changes in key years. Click on a state to highlight.</p>
+            <div id="bumpchart"></div>
+            <div class="viz-description">
+              <h4>Description</h4>
+              <p>The bump chart reveals the stability of state rankings in real income over the decade. Top positions are consistently held by the same urban centers, while most states maintain their relative positions with minor fluctuations.</p>
+              <h4>Key Insights</h4>
+              <ul>
+                <li>Top 3 positions remain stable throughout the decade</li>
+                <li>Limited mobility in rankings shows persistent inequality</li>
+                <li>Rural states consistently rank in lower positions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-        <footer>
-            <hr>
-            <p style="text-align: center; font-size: 0.8em;">
-                This data visualisation was created for FIT3179 Data Visualisation 2, Monash University. [cite: 1] <br>
-                Please find the <a href="[Your GitHub URL]/fivedesignsheets.pdf" target="_blank">Five Design Sheets (PDF)</a> and all <a href="[Your GitHub URL]/vega_lite_specs/" target="_blank">Vega-Lite JSON specifications</a> in the GitHub repository.
-            </p>
-        </footer>
+        <!-- Second row: Small Multiples and Text -->
+        <div class="viz-row">
+          <div class="viz-col-wide">
+            <h3>Real Income Growth Trajectories (2012-2022)</h3>
+            <p class="viz-caption">Growth patterns across representative states (2012 = 100)</p>
+            <div id="smallmultiples"></div>
+          </div>
+          <div class="viz-col-text">
+            <h3>Understanding Growth Patterns</h3>
+            <p class="description-text">These small multiples compare how real income has grown across different states, using 2012 as the baseline (index = 100). The trajectories reveal diverse growth patterns that reflect each region's economic characteristics.</p>
+            
+            <h4>Key Observations</h4>
+            <ul class="observation-list">
+              <li>W.P. Kuala Lumpur shows the strongest growth trajectory (~40% increase)</li>
+              <li>Industrial states like Selangor and Penang display steady but volatile growth</li>
+              <li>Resource-dependent states show moderate, cyclical growth</li>
+              <li>Rural states exhibit the slowest real income improvements</li>
+            </ul>
 
+            <h4>Implications</h4>
+            <p class="insight-text">The divergent growth patterns highlight Malaysia's regional economic divide. Urban areas continue to pull ahead in real terms, while rural regions struggle to keep pace, suggesting the need for targeted development policies to address these persistent disparities.</p>
+          </div>
+        </div>
+      </section>
+
+      <style>
+        .viz-row {
+          display: flex;
+          gap: 2rem;
+          margin-bottom: 3rem;
+          width: 100%;
+        }
+        
+        .viz-col {
+          flex: 1;
+          min-width: 0;
+        }
+        
+        .viz-col-wide {
+          flex: 0 0 65%;
+        }
+        
+        .viz-col-text {
+          flex: 0 0 30%;
+          padding: 0 1rem;
+        }
+        
+        .viz-description {
+          margin-top: 1rem;
+          padding: 1rem;
+          background: #f8f9fa;
+          border-radius: 4px;
+        }
+        
+        .viz-description ul {
+          list-style-type: disc;
+          margin-left: 1.5rem;
+          margin-bottom: 1rem;
+        }
+        
+        .viz-description li {
+          margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 1200px) {
+          .viz-row {
+            flex-direction: column;
+          }
+          
+          .viz-col-wide, .viz-col-text {
+            flex: 1;
+            width: 100%;
+          }
+        }
+      </style>
+
+      <div class="section-divider">
+        <h2>Inflation and Purchasing Power Erosion</h2>
+      </div>
+
+      <section class="analysis-grid">
+        <div class="analysis-row">
+          <div class="viz-container">
+            <div id="slopechart"></div>
+          </div>
+          <div class="text-content">
+            <h3>Nominal vs Real Income Gaps (2022)</h3>
+            <div class="analysis-text">
+              <p class="description-text">
+                This slope chart compares nominal median income (before adjusting for inflation) with real median income (inflation-adjusted) across Malaysian states in 2022. 
+                Each pair of connected points represents the inflation effect - how much purchasing power is eroded once cost-of-living increases are accounted for.
+              </p>
+              
+              <h4>Key Points</h4>
+              <ul class="observation-list">
+                <li>The gap between the two measures averages around -5%, but varies by state.</li>
+                <li>W.P. Kuala Lumpur, Putrajaya, and Selangor remain the highest earners even after adjustment.</li>
+                <li>Sabah and Kelantan show the smallest nominal-to-real difference.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="analysis-row">
+          <div class="text-content">
+            <h3>Inflation Patterns (2012-2022)</h3>
+            <div class="analysis-text">
+              <p class="description-text">
+                Red indicates high inflation, blue shows deflation, and white represents price stability.
+              </p>
+              
+              <h4>Key Points</h4>
+              <ul class="observation-list">
+                <li>Inflation surged in 2022, exceeding 6% in several states</li>
+                <li>Brief deflation occurred in 2020 during the pandemic</li>
+                <li>East Malaysian states show lower volatility</li>
+              </ul>
+            </div>
+          </div>
+          <div class="viz-container">
+            <div id="inflation-heatmap"></div>
+          </div>
+        </div>
+
+        <div class="analysis-row">
+          <div class="viz-container">
+            <div id="scatterplot"></div>
+          </div>
+          <div class="text-content">
+            <h3>Wage Growth vs Inflation (2012-2022)</h3>
+            <div class="analysis-text">
+              <p class="description-text">
+                Each point represents a state, comparing its income growth rate with inflation rate.
+              </p>
+              
+              <h4>Key Points</h4>
+              <ul class="observation-list">
+                <li>Most states cluster above the diagonal line, showing income growth outpacing inflation</li>
+                <li>Urban states like Selangor and KL show stronger wage growth</li>
+                <li>Rural states tend to have lower growth in both measures</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider">
+        <h2>Income Structure and Inequality</h2>
+      </div>
+
+      <section class="analysis-grid">
+        <div class="analysis-row">
+          <div class="viz-container">
+            <div id="lollipop"></div>
+          </div>
+          <div class="text-content">
+            <h3>Mean vs Median Income Gap (2022)</h3>
+            <div class="analysis-text">
+              <p class="description-text">
+                Wealth concentration inflates mean income > 25% above median.
+              </p>
+              
+              <h4>Key Points</h4>
+              <ul class="observation-list">
+                <li>KL and Selangor show largest gaps between mean and median</li>
+                <li>Rural states like Kelantan have smaller gaps</li>
+                <li>Higher gaps indicate greater income inequality</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-    
+
     <script>
-        // Store your Vega-Lite JSON specifications in a separate folder (e.g., 'vega_lite_specs') 
-        // as required by the assignment[cite: 20].
+      // Global variables to store view instances
+      let heatmapView;
+      let bumpcartView;
+      let smallMultiplesView;
 
-        // 1️⃣ Render the Choropleth Map (VISUALISATION 1)
-        const spec1_url = 'chloropeth_medinc.json';
+      // Handle state selection changes
+      document.getElementById('globalStateSelect').addEventListener('change', function(event) {
+        const selectedState = event.target.value;
+        
+        // Update heatmap
+        if (heatmapView) {
+          heatmapView.signal('selectedState', selectedState).run();
+        }
+        
+        // Update bump chart
+        if (bumpcartView) {
+          bumpcartView.signal('selectedState', selectedState).run();
+        }
+        
+        // Update small multiples
+        if (smallMultiplesView) {
+          smallMultiplesView.signal('selectedState', selectedState).run();
+        }
+      });
 
-        vegaEmbed('#vis1_map', spec1_url, { actions: false })
-            .then(result => console.log('Map rendered successfully'))
-            .catch(error => console.error('Error rendering map:', error));
+      // Load choropleth map
+      vegaEmbed('#choropleth_real', 'choropleth_map_real/choropleth_real_income.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading choropleth:', error);
+        document.getElementById('choropleth_real').innerHTML = 'Error loading map visualization';
+      });
 
-        // 2️⃣ Render the Small-Multiples Map (VISUALISATION 2)
-        // const spec2_url = 'vega_lite_specs/vis2_small_multiples.json';
-        // vegaEmbed('#vis2_small_multiples', spec2_url, { actions: false })
-        //     .catch(error => console.error('Error rendering small multiples:', error));
+      // Load histogram
+      vegaEmbed('#histogram', 'histogram/income_distribution_v2.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading histogram:', error);
+        document.getElementById('histogram').innerHTML = 'Error loading histogram visualization';
+      });
 
+      // Load heatmap
+      vegaEmbed('#heatmap', 'heatmap_real/income_heatmap_real_v2.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).then(result => {
+        heatmapView = result.view;
+      }).catch(error => {
+        console.error('Error loading heatmap:', error);
+        document.getElementById('heatmap').innerHTML = 'Error loading heatmap visualization';
+      });
+
+      // Load bump chart
+      vegaEmbed('#bumpchart', 'bump_chart/income_ranking_fixed_v2.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).then(result => {
+        bumpcartView = result.view;
+      }).catch(error => {
+        console.error('Error loading bump chart:', error);
+        document.getElementById('bumpchart').innerHTML = 'Error loading bump chart visualization';
+      });
+
+      // Load small multiples
+      vegaEmbed('#smallmultiples', 'small_multiples/income_growth_grid_v4.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).then(result => {
+        smallMultiplesView = result.view;
+      }).catch(error => {
+        console.error('Error loading small multiples:', error);
+        document.getElementById('smallmultiples').innerHTML = 'Error loading small multiples visualization';
+      });
+
+      // Load slope chart
+      vegaEmbed('#slopechart', 'slope_chart/nominal_vs_real.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading slope chart:', error);
+        document.getElementById('slopechart').innerHTML = 'Error loading slope chart visualization';
+      });
+
+      // Load inflation heatmap
+      vegaEmbed('#inflation-heatmap', 'inflation_heatmap/state_inflation.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading inflation heatmap:', error);
+        document.getElementById('inflation-heatmap').innerHTML = 'Error loading inflation heatmap visualization';
+      });
+
+      // Load scatter plot
+      vegaEmbed('#scatterplot', 'scatter_plot/wage_vs_inflation_v2.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading scatter plot:', error);
+        document.getElementById('scatterplot').innerHTML = 'Error loading scatter plot visualization';
+      });
+
+      // Load lollipop chart
+      vegaEmbed('#lollipop', 'lollipop/income_gap.json', {
+        actions: false,
+        renderer: 'svg'
+      }).catch(error => {
+        console.error('Error loading lollipop chart:', error);
+        document.getElementById('lollipop').innerHTML = 'Error loading lollipop visualization';
+      });
     </script>
-
-</body>
+  </body>
 </html>

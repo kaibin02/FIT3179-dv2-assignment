@@ -1,0 +1,89 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Income Inequality Gap by State (2022)",
+    "subtitle": "Difference between mean and median income as percentage of median"
+  },
+  "width": 600,
+  "height": 400,
+  "data": {"url": "../income_cpi_analysis.csv"},
+  "transform": [
+    {
+      "calculate": "parseInt(slice(datum.date, 0, 4))",
+      "as": "year"
+    },
+    {
+      "filter": "datum.year == 2022"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "nominal",
+      "title": "State",
+      "sort": {"field": "mean_median_gap_pct", "order": "descending"}
+    },
+    "x": {
+      "field": "mean_median_gap_pct",
+      "type": "quantitative",
+      "title": "Mean-Median Gap (%)",
+      "axis": {"grid": false}
+    },
+    "tooltip": [
+      {"field": "state", "type": "nominal", "title": "State"},
+      {"field": "mean_median_gap_pct", "type": "quantitative", "title": "Mean-Median Gap", "format": ".1f"},
+      {"field": "income_mean_real", "type": "quantitative", "title": "Mean Income (RM)", "format": ",.0f"},
+      {"field": "income_median_real", "type": "quantitative", "title": "Median Income (RM)", "format": ",.0f"}
+    ]
+  },
+  "layer": [
+    {
+      "mark": {"type": "rule", "color": "#ccc"},
+      "encoding": {
+        "x": {"datum": 0}
+      }
+    },
+    {
+      "mark": {"type": "rule", "color": "#aaa"},
+      "encoding": {
+        "x2": {"field": "mean_median_gap_pct"}
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 100,
+        "fill": "#4C78A8",
+        "stroke": "white",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "transform": [{
+        "calculate": "datum.mean_median_gap_pct > 30 ? 'High inequality' : datum.mean_median_gap_pct < 15 ? 'Low inequality' : 'Moderate'",
+        "as": "inequality_level"
+      }],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 5,
+        "fontSize": 11
+      },
+      "encoding": {
+        "text": {"field": "mean_median_gap_pct", "format": ".1f"},
+        "color": {
+          "field": "inequality_level",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Low inequality", "Moderate", "High inequality"],
+            "range": ["#2ecc71", "#3498db", "#e74c3c"]
+          }
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {"stroke": null}
+  }
+}

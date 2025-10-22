@@ -1,0 +1,93 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Distribution of Real Median Income by State (2022)",
+    "subtitle": "Shows clustering patterns and outlier states"
+  },
+  "width": 400,
+  "height": 300,
+  "data": {"url": "../income_cpi_analysis.csv"},
+  "transform": [
+    {
+      "calculate": "parseInt(slice(datum.date, 0, 4))",
+      "as": "year"
+    },
+    {
+      "filter": "datum.year == 2022"
+    }
+  ],
+    {
+      "aggregate": [{
+        "op": "mean",
+        "field": "income_median_real",
+        "as": "national_median"
+      }],
+      "groupby": []
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "opacity": 1},
+      "encoding": {
+        "x": {
+          "field": "income_median_real",
+          "type": "quantitative",
+          "title": "Real Median Income (RM)",
+          "bin": {"maxbins": 7}
+        },
+        "y": {
+          "aggregate": "count",
+          "title": "Number of States"
+        },
+        "tooltip": [
+          {"field": "income_median_real", "title": "Real Median Income", "type": "quantitative", "format": ",.0f"},
+          {"aggregate": "count", "title": "Number of States"}
+        ]
+      }
+    },
+    {
+      "transform": [{
+        "aggregate": [{
+          "op": "mean",
+          "field": "income_median_real",
+          "as": "national_median"
+        }],
+        "groupby": []
+      }],
+      "mark": {"type": "rule", "color": "red", "strokeDash": [4, 4]},
+      "encoding": {
+        "x": {"field": "national_median", "type": "quantitative"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "bottom",
+        "dx": 5,
+        "dy": -10,
+        "fontSize": 11,
+        "fontStyle": "italic",
+        "color": "#333"
+      },
+      "encoding": {
+        "x": {"field": "national_median", "type": "quantitative"},
+        "y": {"value": 50},
+        "text": {
+          "field": "national_median",
+          "type": "quantitative",
+          "format": ",.0f"
+        }
+      }
+    }
+  ],
+  "config": {
+    "bar": {
+      "fill": "#4C78A8",
+      "opacity": 0.6
+    },
+    "axis": {
+      "grid": false
+    }
+  }
+}

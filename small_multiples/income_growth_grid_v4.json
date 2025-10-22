@@ -1,0 +1,212 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Real Income Growth Trajectories (2012-2022, Base Year 2012=100)",
+    "fontSize": 14,
+    "anchor": "middle"
+  },
+  "data": {"url": "../income_cpi_analysis.csv"},
+  "transform": [
+    {
+      "filter": {
+        "field": "state",
+        "oneOf": [
+          "W.P. Kuala Lumpur", "Selangor", "Kelantan",
+          "Sabah", "Sarawak", "Pulau Pinang"
+        ]
+      }
+    }
+  ],
+  "vconcat": [
+    {
+      "hconcat": [
+        {
+          "title": {"text": "W.P. Kuala Lumpur (Highest Growth)", "fontSize": 12},
+          "transform": [{"filter": "datum.state == 'W.P. Kuala Lumpur'"}],
+          "width": 160,
+          "height": 130,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": -45, "labelFontSize": 10}
+            },
+            "y": {
+              "field": "income_median_real_indexed",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]},
+              "axis": {"labelFontSize": 10}
+            },
+            "color": {"value": "#4e79a7"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "income_median_real_indexed", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "title": {"text": "Selangor (Urban Core)", "fontSize": 12},
+          "transform": [{"filter": "datum.state == 'Selangor'"}],
+          "width": 160,
+          "height": 130,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": -45, "labelFontSize": 10}
+            },
+            "y": {
+              "field": "income_median_real_indexed",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]},
+              "axis": {"labelFontSize": 10}
+            },
+            "color": {"value": "#59a14f"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "income_median_real_indexed", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "title": {"text": "Pulau Pinang (Industrial Hub)", "fontSize": 12},
+          "transform": [{"filter": "datum.state == 'Pulau Pinang'"}],
+          "width": 160,
+          "height": 130,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": -45, "labelFontSize": 10}
+            },
+            "y": {
+              "field": "income_median_real_indexed",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]},
+              "axis": {"labelFontSize": 10}
+            },
+            "color": {"value": "#76b7b2"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "income_median_real_indexed", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "hconcat": [
+        {
+          "title": {"text": "Sarawak (Resource-Rich)", "fontSize": 12},
+          "transform": [{"filter": "datum.state == 'Sarawak'"}],
+          "width": 160,
+          "height": 130,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": -45, "labelFontSize": 10}
+            },
+            "y": {
+              "field": "income_median_real_indexed",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]},
+              "axis": {"labelFontSize": 10}
+            },
+            "color": {"value": "#edc948"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "income_median_real_indexed", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "title": {"text": "Kelantan (Rural Economy)", "fontSize": 12},
+          "transform": [{"filter": "datum.state == 'Kelantan'"}],
+          "width": 160,
+          "height": 130,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": -45, "labelFontSize": 10}
+            },
+            "y": {
+              "field": "income_median_real_indexed",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]},
+              "axis": {"labelFontSize": 10}
+            },
+            "color": {"value": "#b07aa1"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "income_median_real_indexed", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "title": {"text": "Sabah (East Malaysia)", "fontSize": 12},
+          "transform": [{"filter": "datum.state == 'Sabah'"}],
+          "width": 160,
+          "height": 130,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": -45, "labelFontSize": 10}
+            },
+            "y": {
+              "field": "income_median_real_indexed",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]},
+              "axis": {"labelFontSize": 10}
+            },
+            "color": {"value": "#86BCB6"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "income_median_real_indexed", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "concat": {"spacing": 20},
+    "view": {"stroke": null},
+    "axis": {
+      "titleFontSize": 11,
+      "titlePadding": 10
+    }
+  }
+}

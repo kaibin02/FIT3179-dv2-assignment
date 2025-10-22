@@ -1,0 +1,86 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Real Income Growth Trajectories (2012-2022, Base Year 2012=100)",
+  "data": {"url": "../income_cpi_analysis.csv"},
+  "transform": [
+    {
+      "filter": {
+        "field": "state",
+        "oneOf": ["W.P. Kuala Lumpur", "Selangor", "Sabah", "Sarawak", "Kelantan", "Penang"]
+      }
+    },
+    {
+      "aggregate": [{
+        "op": "mean",
+        "field": "income_median_real",
+        "as": "income_median_real"
+      }],
+      "groupby": ["state", "year"]
+    },
+    {
+      "window": [{
+        "op": "first_value",
+        "field": "income_median_real",
+        "as": "base_value"
+      }],
+      "groupby": ["state"],
+      "sort": [{"field": "year"}],
+      "frame": [null, 0]
+    },
+    {
+      "calculate": "100 * datum.income_median_real / datum.base_value",
+      "as": "indexed_value"
+    }
+  ],
+  "facet": {
+    "field": "state",
+    "type": "nominal",
+    "columns": 2,
+    "title": null,
+    "sort": {"field": "indexed_value", "op": "max", "order": "descending"}
+  },
+  "spec": {
+    "width": 250,
+    "height": 150,
+    "mark": {
+      "type": "line",
+      "point": true,
+      "strokeWidth": 3
+    },
+    "encoding": {
+      "x": {
+        "field": "year",
+        "type": "ordinal",
+        "title": "Year",
+        "axis": {"labelAngle": 0}
+      },
+      "y": {
+        "field": "indexed_value",
+        "type": "quantitative",
+        "title": "Growth Index (2012=100)",
+        "axis": {"grid": true},
+        "scale": {"domain": [80, 160]}
+      },
+      "color": {
+        "field": "state",
+        "type": "nominal",
+        "legend": null
+      },
+      "tooltip": [
+        {"field": "state", "type": "nominal", "title": "State"},
+        {"field": "year", "type": "ordinal", "title": "Year"},
+        {"field": "indexed_value", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+        {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+      ]
+    }
+  },
+  "config": {
+    "view": {"stroke": "transparent"},
+    "facet": {
+      "spacing": 40
+    },
+    "concat": {
+      "spacing": 40
+    }
+  }
+}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Malaysia Household Income Analysis (2012-2022)</title>tml lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="wi        <div id="histogram"></div>
+      </section>
+
+      <section class="visualization-section">
+        <h3>Inflation Patterns Across States (2012-2022)</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">
+          Shows how inflation rates varied across states and years. Blue indicates deflation, white shows zero inflation,
+          and red shows high inflation. Values shown are year-over-year changes in CPI.
+        </p>
+        <div id="inflation-heatmap"></div>
+      </section>
+    </div>
+
+    <script>evice-width, initial-scale=1" />
+    <title>Malaysia Household Income Analysis (2012-2022)</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+      body { 
+        font-family: system-ui, Arial, sans-serif; 
+        margin: 2rem; 
+        background:#fff;
+        color: #333;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      section {
+        margin: 2rem 0;
+      }
+      h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+      }
+      h3 {
+        color: #34495e;
+        margin-bottom: 1rem;
+      }
+      #choropleth, #heatmap, #bumpchart, #slopechart, #smallmultiples, #scatterplot { 
+        width: 100%;
+        height: 500px;
+        margin: 1rem auto;
+      }
+      #error { 
+        color: #e74c3c;
+        margin: .5rem 0;
+        padding: 1rem;
+        border-radius: 4px;
+        background: #fadbd8;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+  <h2>Malaysia Household Income Analysis</h2>
+    <div id="error"></div>
+    
+    <div class="container">
+      <section>
+        <h3>Real (Inflation-Adjusted) Median Income by State</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">
+          Shows purchasing power across states, adjusted for inflation. Use the year selector to explore changes over time.
+        </p>
+        <div id="choropleth"></div>
+      </section>
+      
+      <section>
+        <h3>Income Trends Over Time (2012-2022)</h3>
+        <div id="heatmap"></div>
+      </section>
+
+      <section>
+        <h3>State Rankings Over Time (1970-2022)</h3>
+        <div id="bumpchart"></div>
+      </section>
+
+      <section>
+        <h3>Income Distribution Skew by State (2022)</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">
+          The gap between mean and median income reveals income inequality. 
+          A larger gap indicates more income concentration at the higher end of the distribution.
+        </p>
+        <div id="slopechart"></div>
+      </section>
+
+      <section>
+        <h3>Real Income Growth Trajectories (2012-2022)</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">
+          Comparing growth patterns across selected states, indexed to 2012 levels (2012=100).
+          This visualization controls for inflation to show real purchasing power changes.
+        </p>
+        <div id="smallmultiples"></div>
+      </section>
+
+      <section>
+        <h3>Wage Growth vs Inflation by State (2022)</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">
+          Shows which states beat inflation in 2022. Point size indicates income inequality (larger = more unequal).
+          States above the diagonal line experienced real income decline.
+        </p>
+        <div id="scatterplot"></div>
+      </section>
+
+      <section class="visualization-section">
+        <h3>Distribution of Real Median Income (2022)</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">
+          Shows how states cluster around different income levels, highlighting potential economic disparities.
+          The dashed red line indicates the national median.
+        </p>
+        <div id="histogram"></div>
+      </section>
+
+      <section class="visualization-section">
+        <h3>Inflation Patterns Across States (2012-2022)</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">
+          Heatmap shows inflation rates by state and year. Blue indicates deflation, white is zero, and red shows inflation.
+          Numbers show exact inflation rates, with white text for better visibility in extreme cases.
+        </p>
+        <div id="heatmap"></div>
+      </section>
+    </div>
+
+    <script>
+      // Load real income choropleth map
+      vegaEmbed('#choropleth', 'choropleth_map_real/choropleth_real_income.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading choropleth:', error);
+        document.getElementById('choropleth').innerHTML = 'Error loading map visualization';
+      });
+
+      // Load real income heatmap
+      vegaEmbed('#heatmap', 'heatmap_real/income_heatmap_real.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading heatmap:', error);
+        document.getElementById('heatmap').innerHTML = 'Error loading heatmap visualization';
+      });
+
+      // Load small multiples
+      vegaEmbed('#smallmultiples', 'small_multiples/income_growth_grid.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading small multiples:', error);
+        document.getElementById('smallmultiples').innerHTML = 'Error loading small multiples visualization';
+      });
+
+      // Load bump chart
+      vegaEmbed('#bumpchart', 'bump_chart/income_ranking_fixed.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading bump chart:', error);
+        document.getElementById('bumpchart').innerHTML = 'Error loading ranking visualization';
+      });
+
+      // Load slope chart
+      vegaEmbed('#slopechart', 'slope_chart/nominal_vs_real.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading slope chart:', error);
+        document.getElementById('slopechart').innerHTML = 'Error loading slope chart visualization';
+      });
+
+      // Load scatter plot
+      vegaEmbed('#scatterplot', 'scatter_plot/wage_vs_inflation_v2.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading scatter plot:', error);
+        document.getElementById('scatterplot').innerHTML = 'Error loading scatter plot visualization';
+      });
+
+      // Load histogram
+      vegaEmbed('#histogram', 'histogram/income_distribution_v2.json', {
+        actions: false,
+        renderer: 'svg'
+      }).catch(error => {
+        console.error('Error loading histogram:', error);
+        document.getElementById('histogram').innerHTML = 'Error loading histogram visualization';
+      });
+
+      // Load heatmap
+      vegaEmbed('#heatmap', 'heatmap_real/income_heatmap_real.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading heatmap:', error);
+        document.getElementById('heatmap').innerHTML = 'Error loading heatmap visualization';
+      });
+      // Load inflation heatmap
+      vegaEmbed('#inflation-heatmap', 'heatmap/inflation_heatmap.json', {
+        actions: false,
+        renderer: 'canvas'
+      }).catch(error => {
+        console.error('Error loading inflation heatmap:', error);
+        document.getElementById('inflation-heatmap').innerHTML = 'Error loading inflation heatmap visualization';
+      });
+    </script>
+  </body>
+</html>

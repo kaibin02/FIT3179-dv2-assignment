@@ -1,0 +1,89 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Inflation Patterns Across States (2012-2022)",
+    "subtitle": "Year-over-year change in Consumer Price Index (%)"
+  },
+  "width": 600,
+  "height": 400,
+  "data": {"url": "../income_cpi_analysis.csv"},
+  "transform": [
+    {
+      "calculate": "parseInt(slice(datum.date, 0, 4))",
+      "as": "year"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "nominal",
+      "title": "State",
+      "sort": {
+        "field": "inflation_yoy_pct",
+        "op": "mean",
+        "order": "descending"
+      }
+    },
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": "Year"
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rect",
+        "stroke": "#ccc",
+        "width": {"band": 1},
+        "height": {"band": 1}
+      },
+      "encoding": {
+        "color": {
+          "field": "inflation_yoy_pct",
+          "type": "quantitative",
+          "title": "Inflation Rate (%)",
+          "scale": {
+            "domain": [-2, 0, 8],
+            "range": ["#2166ac", "#f7f7f7", "#b2182b"],
+            "type": "linear"
+          }
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "inflation_yoy_pct", "type": "quantitative", "title": "Inflation Rate", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "baseline": "middle",
+        "align": "center"
+      },
+      "encoding": {
+        "text": {
+          "field": "inflation_yoy_pct",
+          "type": "quantitative",
+          "format": ".1f"
+        },
+        "color": {
+          "condition": {
+            "test": "abs(datum.inflation_yoy_pct) >= 5",
+            "value": "white"
+          },
+          "value": "black"
+        }
+      }
+    }
+  ],
+  "config": {
+    "axis": {
+      "grid": false
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

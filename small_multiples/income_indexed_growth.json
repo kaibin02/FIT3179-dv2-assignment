@@ -1,0 +1,169 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Real Income Growth Trajectories (2012-2022, Base Year 2012=100)",
+  "data": {"url": "../income_cpi_analysis.csv"},
+  "transform": [
+    {
+      "filter": {
+        "field": "state",
+        "oneOf": ["W.P. Kuala Lumpur", "Selangor", "Sabah", "Sarawak", "Kelantan", "Penang"]
+      }
+    }
+  ],
+  "concat": [
+    {
+      "hconcat": [
+        {
+          "title": "W.P. Kuala Lumpur",
+          "transform": [{"filter": "datum.state == 'W.P. Kuala Lumpur'"}],
+          "width": 200,
+          "height": 150,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal", "title": "Year"},
+            "y": {
+              "field": "indexed_value",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]}
+            },
+            "color": {"value": "#1f77b4"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "indexed_value", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "title": "Selangor",
+          "transform": [{"filter": "datum.state == 'Selangor'"}],
+          "width": 200,
+          "height": 150,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal", "title": "Year"},
+            "y": {
+              "field": "indexed_value",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]}
+            },
+            "color": {"value": "#ff7f0e"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "indexed_value", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "hconcat": [
+        {
+          "title": "Sabah",
+          "transform": [{"filter": "datum.state == 'Sabah'"}],
+          "width": 200,
+          "height": 150,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal", "title": "Year"},
+            "y": {
+              "field": "indexed_value",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]}
+            },
+            "color": {"value": "#2ca02c"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "indexed_value", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "title": "Sarawak",
+          "transform": [{"filter": "datum.state == 'Sarawak'"}],
+          "width": 200,
+          "height": 150,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal", "title": "Year"},
+            "y": {
+              "field": "indexed_value",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]}
+            },
+            "color": {"value": "#d62728"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "indexed_value", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "hconcat": [
+        {
+          "title": "Kelantan",
+          "transform": [{"filter": "datum.state == 'Kelantan'"}],
+          "width": 200,
+          "height": 150,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal", "title": "Year"},
+            "y": {
+              "field": "indexed_value",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]}
+            },
+            "color": {"value": "#9467bd"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "indexed_value", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        },
+        {
+          "title": "Penang",
+          "transform": [{"filter": "datum.state == 'Penang'"}],
+          "width": 200,
+          "height": 150,
+          "mark": {"type": "line", "point": true},
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal", "title": "Year"},
+            "y": {
+              "field": "indexed_value",
+              "type": "quantitative",
+              "title": "Growth Index",
+              "scale": {"domain": [80, 160]}
+            },
+            "color": {"value": "#8c564b"},
+            "tooltip": [
+              {"field": "state", "type": "nominal", "title": "State"},
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "indexed_value", "type": "quantitative", "title": "Growth Index", "format": ".1f"},
+              {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "view": {"stroke": "transparent"},
+    "concat": {"spacing": 20}
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Real Median Income by State (Adjusted for Inflation)",
+  "width": 800,
+  "height": 600,
+  "view": {"stroke": null, "fill": "#93C3DE"},
+  "data": {
+    "url": "../choropleth_map/malaysia_states.json",
+    "format": {
+      "type": "topojson",
+      "feature": "ne_10m_admin_1_states_provinces"
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.properties.type == 'Federal Territory' ? 'W.P. ' + datum.properties.name : datum.properties.name",
+      "as": "state_name"
+    },
+    {
+      "lookup": "state_name",
+      "from": {
+        "data": {
+          "url": "../income_cpi_analysis.csv"
+        },
+        "key": "state",
+        "fields": ["income_median_real", "income_median", "year"]
+      }
+    },
+    {
+      "filter": "datum.year == 2022"
+    }
+  ],
+  "projection": {
+    "type": "equirectangular",
+    "center": [109, 4],
+    "scale": 2200
+  },
+  "mark": {
+    "type": "geoshape",
+    "stroke": "#ffffff",
+    "strokeWidth": 1
+  },
+  "encoding": {
+    "fill": {
+      "field": "income_median_real",
+      "type": "quantitative",
+      "title": "Real Median Income (RM)",
+      "scale": {
+        "type": "linear",
+        "scheme": "greens",
+        "nice": true,
+        "domainMin": 0
+      }
+    },
+    "tooltip": [
+      {"field": "properties.name", "type": "nominal", "title": "State"},
+      {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"},
+      {"field": "income_median", "type": "quantitative", "title": "Nominal Median Income (RM)", "format": ",.0f"}
+    ]
+  }
+}
