@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Malaysia Household Income Analysis (2012-2022)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
@@ -159,16 +160,12 @@
       }
 
       .analysis-grid {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 8px;
         margin: 2rem auto;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
 
       .section-divider {
         text-align: center;
         padding: 2rem 0;
-        background: rgba(255, 255, 255, 0.9);
         margin: 2rem 0;
       }
 
@@ -259,6 +256,8 @@
       .header h1 {
         font-size: 2.5rem;
         margin-bottom: 1rem;
+        font-family: 'Inter', serif;
+        font-weight: 700;
       }
       .header p {
         font-size: 1.2rem;
@@ -298,6 +297,18 @@
         background: white;
         padding: 2rem;
         border-radius: 10px;
+      }
+      .header h1 {
+        font-size: 2.5rem;
+        font-family: 'Playfair Display', serif;
+        font-weight: 900;
+        color: #1a472a;
+        margin-bottom: 1rem;
+      }
+      .header p {
+        font-size: 1.2rem;
+        color: #2c3e50;
+      }
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       }
       section {
@@ -368,9 +379,7 @@
         min-width: 300px;
       }
       .multiples-text {
-        background: #f8f9fa;
         padding: 1.5rem;
-        border-radius: 8px;
         height: 100%;
       }
       .text-content {
@@ -433,7 +442,7 @@
         font-weight: 500;
       }
       .viz-caption {
-        color: #666;
+        /* color: #666; */
         font-size: 0.9em;
         margin: 0.5rem 0 1.5rem;
         font-style: italic;
@@ -443,19 +452,19 @@
       }
       .viz-description {
         padding: 1rem;
-        background: #f8f9fa;
+        /* background: #f8f9fa; */
         border-radius: 4px;
         margin-top: 1rem;
       }
       .viz-description h4 {
-        color: #2c3e50;
+        /* color: #2c3e50; */
         margin: 1rem 0 0.5rem;
         font-size: 1.1em;
       }
       .viz-description p {
         font-size: 0.95em;
         line-height: 1.5;
-        color: #4a4a4a;
+        /* color: #4a4a4a; */
         margin-bottom: 1rem;
       }
       .viz-container {
@@ -473,7 +482,6 @@
         </div>
         <div class="intro-text">
           <p>The Consumer Price Index (CPI) and median household income are key indicators of Malaysia's financial well-being. The CPI tracks changes in the overall cost of living - how much prices have risen for common goods and services - while the median household income represents the midpoint of all household earnings, providing a better view of the "typical" family than the mean, which can be distorted by outliers.</p>
-          <p>To compare living standards fairly over time, the median incomes are adjusted for inflation using the CPI. This process converts nominal values (actual ringgit earned) into real median income, expressed in constant 2010 prices. Real income therefore reflects what households can actually buy, removing the effect of rising prices. In other words, if nominal income increases but inflation rises faster, purchasing power - and thus quality of life - falls.</p>
         </div>
 
         <div class="map-section">
@@ -486,12 +494,11 @@
               <div class="two-column-text">
                 <div class="column">
                   <h3>Understanding Real Median Income</h3>
-                  <p>Real median income reflects the true purchasing power of Malaysian households after adjusting for inflation. The original income data from DOSM's Household Income and Basic Amenities Survey records nominal median income - the middle household income value in each state. However, nominal figures can be misleading, as they rise with general price increases.</p>
+                  <p>In the choropleth map, we are comparing real median income instead of nominal median income. Why real median income? Because nominal income only shows the amount of money households earn without accounting for the changing cost of living over time. By adjusting the median income using the Consumer Price Index (CPI), we obtain the real median income - a more accurate reflection of households' purchasing power. This adjustment filters out inflation effects, revealing whether people are genuinely better off, not just earning larger numbers on paper. A rising nominal income might seem positive, but if prices have increased faster, real income could actually fall. Therefore, using real median income allows for fairer state-to-state and year-to-year comparisons, showing the true standard of living rather than illusionary wage growth.</p>
                 </div>
                 <div id="histogram"></div>
                 <div class="column">
-                  <h3>Spatial Distribution</h3>
-                  <p>The choropleth map above visualises real median income by state in 2022. Darker shades represent higher purchasing power. We can immediately observe strong regional inequality: Selangor, W.P. Kuala Lumpur, and Putrajaya form a high-income cluster, each exceeding RM 7,000 in real median income, while states in the East Coast and Northern regions - particularly Kelantan, Perlis, and Kedah - remain below RM 4,000.</p>
+                            <p>To compare living standards fairly over time, the median incomes are adjusted for inflation using the CPI. This process converts nominal values (actual ringgit earned) into real median income, expressed in constant 2010 prices. Real income therefore reflects what households can actually buy, removing the effect of rising prices. In other words, if nominal income increases but inflation rises faster, purchasing power - and thus quality of life - falls.</p>
                 </div>
               </div>
             </div>
@@ -531,11 +538,11 @@
         <div class="viz-row">
           <div class="viz-col">
             <h3>Real Income Evolution</h3>
-            <p class="viz-caption">Darker shades indicate higher real median income. Click on a state to highlight.</p>
+            <p class="viz-caption">Darker shades indicate higher real median income. Use the dropdown to highlight a state.</p>
             <div id="heatmap"></div>
             <div class="viz-description">
               <h4>Description</h4>
-              <p>This heatmap shows the evolution of each state's real median income from 2012 to 2022. Darker shades indicate higher purchasing power, revealing consistent patterns where urban states like Kuala Lumpur and Selangor maintain higher real incomes, while states like Kelantan and Sabah show persistently lower values.</p>
+              <p>In 2020, many states appear lighter than expected - not because incomes fell sharply, but because inflation dropped during the pandemic. This temporary deflation made real incomes look artificially lower in comparison to other years, even when nominal earnings were stable. The heatmap overall highlights how economic shocks and recovery periods unevenly affected purchasing power across Malaysia.</p>
               <h4>Key Insights</h4>
               <ul>
                 <li>Urban states consistently maintain higher purchasing power</li>
@@ -547,11 +554,11 @@
           
           <div class="viz-col">
             <h3>State Rankings Over Time</h3>
-            <p class="viz-caption">Tracking position changes in key years. Click on a state to highlight.</p>
+            <p class="viz-caption">Tracking position changes in key years. Use the dropdown to highlight a state.</p>
             <div id="bumpchart"></div>
             <div class="viz-description">
               <h4>Description</h4>
-              <p>The bump chart reveals the stability of state rankings in real income over the decade. Top positions are consistently held by the same urban centers, while most states maintain their relative positions with minor fluctuations.</p>
+              <p>The bump chart ranks states by real median income to show movement over time. Unlike the heatmap, which captures absolute changes, this visualisation emphasizes relative economic standing - revealing that Malaysia's income hierarchy is remarkably rigid. Despite growth in most states, few shift positions, underscoring how difficult it is for lower-income regions to catch up with wealthier ones.</p>
               <h4>Key Insights</h4>
               <ul>
                 <li>Top 3 positions remain stable throughout the decade</li>

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Real Median Income by State (Adjusted for Inflation)",
+  "width": 1000,
+  "height": 600,
+  "view": {"stroke": null},
+  "data": {
+    "url": "../choropleth_map/malaysia_states.json",
+    "format": {
+      "type": "topojson",
+      "feature": "ne_10m_admin_1_states_provinces"
+    }
+  },
+  "projection": {
+    "type": "equirectangular",
+    "center": [109, 4],
+    "scale": 2200
+  },
+  "transform": [
+    {
+      "calculate": "datum.properties.type == 'Federal Territory' ? 'W.P. ' + datum.properties.name : datum.properties.name",
+      "as": "state_name"
+    },
+    {
+      "lookup": "state_name",
+      "from": {
+        "data": {
+          "url": "../income_cpi_analysis.csv"
+        },
+        "key": "state",
+        "fields": ["income_median_real", "income_median", "year", "cpi_index_annual"]
+      }
+    },
+    {
+      "filter": "datum.year == 2022"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "fill": {
+          "field": "income_median_real",
+          "type": "quantitative",
+          "title": "Real Median Income (RM)",
+          "scale": {
+            "type": "linear",
+            "scheme": "greens",
+            "nice": true,
+            "domainMin": 0
+          }
+        },
+        "tooltip": [
+          {"field": "properties.name", "type": "nominal", "title": "State"},
+          {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"},
+          {"field": "income_median", "type": "quantitative", "title": "Nominal Median Income (RM)", "format": ",.0f"},
+          {"field": "cpi_index_annual", "type": "quantitative", "title": "CPI Index", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "window": [{"op": "rank", "as": "ranking"}],
+          "sort": [{"field": "income_median_real", "order": "descending"}]
+        },
+        {
+          "filter": "datum.ranking === 1"
+        },
+        {
+          "calculate": "datum.income_median_real == 0 ? '' : 'Highest Income State\\nNominal: RM ' + format(datum.income_median, ',.0f') + '\\nCPI: ' + format(datum.cpi_index_annual, '.1f') + '\\nReal: RM ' + format(datum.income_median_real, ',.0f')",
+          "as": "annotation_text"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 30,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#d73027"
+      },
+      "encoding": {
+        "x": {"field": "properties.longitude", "type": "quantitative"},
+        "y": {"field": "properties.latitude", "type": "quantitative"},
+        "text": {"field": "annotation_text", "type": "nominal"}
+      }
+    },
+    {
+      "transform": [
+        {
+          "window": [{"op": "rank", "as": "ranking"}],
+          "sort": [{"field": "income_median_real", "order": "ascending"}]
+        },
+        {
+          "filter": "datum.ranking === 1"
+        },
+        {
+          "calculate": "datum.income_median_real == 0 ? '' : 'Lowest Income State\\nNominal: RM ' + format(datum.income_median, ',.0f') + '\\nCPI: ' + format(datum.cpi_index_annual, '.1f') + '\\nReal: RM ' + format(datum.income_median_real, ',.0f')",
+          "as": "annotation_text"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 30,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#4575b4"
+      },
+      "encoding": {
+        "x": {"field": "properties.longitude", "type": "quantitative"},
+        "y": {"field": "properties.latitude", "type": "quantitative"},
+        "text": {"field": "annotation_text", "type": "nominal"}
+      }
+    }
+  ]
+}

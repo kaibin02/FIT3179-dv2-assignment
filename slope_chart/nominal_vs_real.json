@@ -57,7 +57,7 @@
       "type": "nominal",
       "scale": {
         "domain": ["Nominal", "Real (Inflation-Adjusted)"],
-        "range": ["#e74c3c", "#2ecc71"]
+        "range": ["#d73027", "#4575b4"]
       },
       "legend": {
         "title": "Income Type"

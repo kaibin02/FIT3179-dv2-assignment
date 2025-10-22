@@ -7,6 +7,17 @@
   "width": 600,
   "height": 400,
   "data": {"url": "../income_cpi_analysis.csv"},
+  "params": [
+    {
+      "name": "Inequality_selection",
+      "bind": {
+        "input": "select",
+        "options": [null, "High inequality", "Moderate", "Low inequality"],
+        "labels": ["All", "High inequality", "Moderate", "Low inequality"],
+        "name": "Inequality Level Filter: "
+      }
+    }
+  ],
   "transform": [
     {
       "calculate": "parseInt(slice(datum.date, 0, 4))",
@@ -14,6 +25,13 @@
     },
     {
       "filter": "datum.year == 2022"
+    },
+    {
+      "calculate": "datum.mean_median_gap_pct > 30 ? 'High inequality' : datum.mean_median_gap_pct < 15 ? 'Low inequality' : 'Moderate'",
+      "as": "inequality_level"
+    },
+    {
+      "filter": "Inequality_selection == null || datum.inequality_level == Inequality_selection"
     }
   ],
   "encoding": {
@@ -59,10 +77,6 @@
       }
     },
     {
-      "transform": [{
-        "calculate": "datum.mean_median_gap_pct > 30 ? 'High inequality' : datum.mean_median_gap_pct < 15 ? 'Low inequality' : 'Moderate'",
-        "as": "inequality_level"
-      }],
       "mark": {
         "type": "text",
         "align": "left",
@@ -77,7 +91,7 @@
           "type": "nominal",
           "scale": {
             "domain": ["Low inequality", "Moderate", "High inequality"],
-            "range": ["#2ecc71", "#3498db", "#e74c3c"]
+            "range": ["#fee090", "#4575b4", "#d73027"]
           }
         }
       }

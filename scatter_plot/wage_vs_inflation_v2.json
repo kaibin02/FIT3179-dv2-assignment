@@ -7,6 +7,17 @@
   "width": 600,
   "height": 400,
   "data": {"url": "../income_cpi_analysis.csv"},
+  "params": [
+    {
+      "name": "Region_selection",
+      "bind": {
+        "input": "select",
+        "options": [null, "Central & Developed", "Northern", "East Coast", "Southern", "East Malaysia"],
+        "labels": ["All", "Central & Developed", "Northern", "East Coast", "Southern", "East Malaysia"],
+        "name": "Region Filter: "
+      }
+    }
+  ],
   "transform": [
     {
       "filter": "year(datum.date) == 2022"
@@ -53,12 +64,11 @@
         "dx": -5,
         "dy": 5,
         "fontSize": 11,
-        "fontStyle": "italic",
-        "opacity": 0.6
+        "opacity": 0.2
       },
       "encoding": {
-        "x": {"value": 295},
-        "y": {"value": 5},
+        "x": {"value": 265},
+        "y": {"value": 40},
         "text": {"value": "Growing but not beating inflation"}
       }
     },
@@ -70,12 +80,11 @@
         "dx": 5,
         "dy": 5,
         "fontSize": 11,
-        "fontStyle": "italic",
-        "opacity": 0.6
+        "opacity": 0.2
       },
       "encoding": {
         "x": {"value": 305},
-        "y": {"value": 5},
+        "y": {"value": 40},
         "text": {"value": "Beating inflation"}
       }
     },
@@ -87,11 +96,10 @@
         "dx": -5,
         "dy": -5,
         "fontSize": 11,
-        "fontStyle": "italic",
-        "opacity": 0.6
+        "opacity": 0.2
       },
       "encoding": {
-        "x": {"value": 295},
+        "x": {"value": 265},
         "y": {"value": 395},
         "text": {"value": "Declining faster than inflation"}
       }
@@ -104,8 +112,7 @@
         "dx": 5,
         "dy": -5,
         "fontSize": 11,
-        "fontStyle": "italic",
-        "opacity": 0.6
+        "opacity": 0.2
       },
       "encoding": {
         "x": {"value": 305},
@@ -115,6 +122,7 @@
     },
     {
       "mark": {"type": "point", "filled": true},
+      "transform": [{"filter": "Region_selection == null || datum.region == Region_selection"}],
       "encoding": {
         "size": {
           "field": "mean_median_gap_pct",
@@ -128,7 +136,7 @@
           "title": "Region",
           "scale": {
             "domain": ["Central & Developed", "Northern", "East Coast", "Southern", "East Malaysia"],
-            "range": ["#1f77b4", "#2ca02c", "#d62728", "#ff7f0e", "#9467bd"]
+            "range": ["#4575b4", "#fee090", "#d73027", "#91bfdb", "#fc8d59"]
           }
         },
         "tooltip": [
@@ -138,19 +146,6 @@
           {"field": "mean_median_gap_pct", "type": "quantitative", "title": "Income Inequality (%)", "format": ".1f"},
           {"field": "region", "type": "nominal", "title": "Region"}
         ]
-      }
-    },
-    {
-      "transform": [{"filter": "datum.isOutlier"}],
-      "mark": {
-        "type": "text",
-        "fontSize": 10,
-        "font": "Arial",
-        "align": "left",
-        "dx": 8
-      },
-      "encoding": {
-        "text": {"field": "state"}
       }
     }
   ]
