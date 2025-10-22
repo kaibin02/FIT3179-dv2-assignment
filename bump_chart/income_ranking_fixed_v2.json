@@ -1,0 +1,158 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "State Rankings by Real Median Income (2012-2022)",
+  "width": 450,
+  "height": 350,
+  "params": [
+    {
+      "name": "selectedState",
+      "value": ""
+    }
+  ],
+  "data":   "data": {"url": "/FIT3179-dv2-assignment/income_cpi_analysis.csv"},
+  "transform": [
+    {
+      "aggregate": [{
+        "op": "mean",
+        "field": "income_median_real",
+        "as": "income_median_real"
+      }],
+      "groupby": ["state", "year"]
+    },
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [
+        {"field": "year", "order": "ascending"},
+        {"field": "income_median_real", "order": "descending"}
+      ],
+      "groupby": ["year"]
+    },
+    {
+      "calculate": "15.5 - datum.rank",
+      "as": "y_value"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": "Year",
+          "sort": [2012, 2014, 2016, 2018, 2019, 2020, 2022],
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "y_value",
+          "type": "quantitative",
+          "title": "Rank",
+          "axis": {
+            "values": [14.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5, 2.5, 1.5, 0.5],
+            "labelExpr": "15.5 - datum.value < 1 ? 1 : 15.5 - datum.value > 15 ? 15 : floor(15.5 - datum.value)"
+          }
+        },
+        "color": {
+          "field": "state",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "range": [
+              "#4e79a7", "#59a14f", "#9c755f", "#76b7b2", 
+              "#edc948", "#b07aa1", "#86BCB6", "#a0cbe8", 
+              "#88ba6d", "#b4a09a", "#97c8c3", "#f1da75", 
+              "#c895bc", "#a7d1cd", "#bad6eb", "#a9cc8f"
+            ]
+          }
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "datum.state === selectedState",
+            "value": 4
+          },
+          "value": 1
+        },
+        "opacity": {
+          "condition": {
+            "test": "!selectedState || datum.state === selectedState",
+            "value": 1
+          },
+          "value": 0.2
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "rank", "type": "quantitative", "title": "Rank"},
+          {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 50
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "y_value",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "state",
+          "type": "nominal"
+        },
+        "opacity": {
+          "condition": {
+            "test": "!selectedState || datum.state === selectedState",
+            "value": 1
+          },
+          "value": 0.2
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "rank", "type": "quantitative", "title": "Rank"},
+          {"field": "income_median_real", "type": "quantitative", "title": "Real Median Income (RM)", "format": ",.0f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 11,
+        "font": "sans-serif"
+      },
+      "transform": [
+        {
+          "filter": "datum.year == 2022"
+        }
+      ],
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "y_value", "type": "quantitative"},
+        "text": {"field": "state", "type": "nominal"},
+        "opacity": {
+          "condition": {
+            "test": "!selectedState || datum.state === selectedState",
+            "value": 1
+          },
+          "value": 0.2
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {"stroke": null}
+  }
+}
