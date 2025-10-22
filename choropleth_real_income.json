@@ -5,7 +5,7 @@
   "height": 600,
   "view": {"stroke": null, "fill": "#93C3DE"},
   "data": {
-    "url": "choropleth_map_real/malaysia_states.json",
+    "url": "malaysia_states.json",
     "format": {
       "type": "topojson",
       "feature": "ne_10m_admin_1_states_provinces"

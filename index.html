@@ -777,7 +777,7 @@
       });
 
       // Load choropleth map
-      vegaEmbed('#choropleth_real', '/FIT3179-dv2-assignment/choropleth_map_real/choropleth_real_income.json', {
+      vegaEmbed('#choropleth_real', 'choropleth_real_income.json', {
         actions: false,
         renderer: 'canvas'
       }).catch(error => {
@@ -786,7 +786,7 @@
       });
 
       // Load histogram
-      vegaEmbed('#histogram', '/FIT3179-dv2-assignment/histogram/income_distribution_v2.json', {
+      vegaEmbed('#histogram', 'income_distribution_v2.json', {
         actions: false,
         renderer: 'canvas'
       }).catch(error => {
@@ -795,7 +795,7 @@
       });
 
       // Load heatmap
-      vegaEmbed('#heatmap', '/FIT3179-dv2-assignment/heatmap_real/income_heatmap_real_v2.json', {
+      vegaEmbed('#heatmap', 'income_heatmap_real_v2.json', {
         actions: false,
         renderer: 'canvas'
       }).then(result => {
@@ -806,7 +806,7 @@
       });
 
       // Load bump chart
-      vegaEmbed('#bumpchart', '/FIT3179-dv2-assignment/bump_chart/income_ranking_fixed_v2.json', {
+      vegaEmbed('#bumpchart', 'income_ranking_fixed_v2.json', {
         actions: false,
         renderer: 'canvas'
       }).then(result => {
@@ -817,7 +817,7 @@
       });
 
       // Load small multiples
-      vegaEmbed('#smallmultiples', '/FIT3179-dv2-assignment/small_multiples/income_growth_grid_v4.json', {
+      vegaEmbed('#smallmultiples', 'income_growth_grid_v4.json', {
         actions: false,
         renderer: 'canvas'
       }).then(result => {
@@ -828,7 +828,7 @@
       });
 
       // Load slope chart
-      vegaEmbed('#slopechart', '/FIT3179-dv2-assignment/slope_chart/nominal_vs_real.json', {
+      vegaEmbed('#slopechart', 'nominal_vs_real.json', {
         actions: false,
         renderer: 'canvas'
       }).catch(error => {
@@ -837,7 +837,7 @@
       });
 
       // Load inflation heatmap
-      vegaEmbed('#inflation-heatmap', '/FIT3179-dv2-assignment/inflation_heatmap/state_inflation.json', {
+      vegaEmbed('#inflation-heatmap', 'state_inflation.json', {
         actions: false,
         renderer: 'canvas'
       }).catch(error => {
@@ -846,7 +846,7 @@
       });
 
       // Load scatter plot
-      vegaEmbed('#scatterplot', '/FIT3179-dv2-assignment/scatter_plot/wage_vs_inflation_v2.json', {
+      vegaEmbed('#scatterplot', 'wage_vs_inflation_v2.json', {
         actions: false,
         renderer: 'canvas'
       }).catch(error => {
@@ -855,7 +855,7 @@
       });
 
       // Load lollipop chart
-      vegaEmbed('#lollipop', '/FIT3179-dv2-assignment/lollipop/income_gap.json', {
+      vegaEmbed('#lollipop', 'income_gap.json', {
         actions: false,
         renderer: 'svg'
       }).catch(error => {
