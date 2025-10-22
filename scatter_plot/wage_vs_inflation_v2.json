@@ -127,7 +127,7 @@
         "size": {
           "field": "mean_median_gap_pct",
           "type": "quantitative",
-          "title": "Income Inequality (Mean-Median Gap %)",
+          "title": "Income Gap %",
           "scale": {"range": [100, 1000]}
         },
         "color": {

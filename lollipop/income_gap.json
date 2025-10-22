@@ -4,7 +4,7 @@
     "text": "Income Inequality Gap by State (2022)",
     "subtitle": "Difference between mean and median income as percentage of median"
   },
-  "width": 600,
+  "width": 550,
   "height": 400,
   "data": {"url": "../income_cpi_analysis.csv"},
   "params": [
@@ -89,6 +89,7 @@
         "color": {
           "field": "inequality_level",
           "type": "nominal",
+          "title": "Gap Level",
           "scale": {
             "domain": ["Low inequality", "Moderate", "High inequality"],
             "range": ["#fee090", "#4575b4", "#d73027"]
