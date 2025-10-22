@@ -6,7 +6,7 @@
   },
   "width": 550,
   "height": 400,
-  "data": {"url": "../income_cpi_analysis.csv"},
+  "data": {"url": "income_cpi_analysis.csv"},
   "params": [
     {
       "name": "Inequality_selection",

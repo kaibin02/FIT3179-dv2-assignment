@@ -10,7 +10,7 @@
     }
   ],
   "data": {
-    "url": "../income_cpi_analysis.csv"
+    "url": "income_cpi_analysis.csv"
   },
   "transform": [
     {

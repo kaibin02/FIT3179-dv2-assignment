@@ -3,7 +3,7 @@
   "title": "Nominal vs Real Median Income by State (2022)",
   "width": 500,
   "height": 400,
-  "data": {"url": "../income_cpi_analysis.csv"},
+  "data": {"url": "income_cpi_analysis.csv"},
   "transform": [
     {
       "filter": "datum.year == 2022"

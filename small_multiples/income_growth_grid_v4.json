@@ -5,7 +5,7 @@
     "fontSize": 14,
     "anchor": "middle"
   },
-  "data": {"url": "../income_cpi_analysis.csv"},
+  "data": {"url": "income_cpi_analysis.csv"},
   "transform": [
     {
       "filter": {

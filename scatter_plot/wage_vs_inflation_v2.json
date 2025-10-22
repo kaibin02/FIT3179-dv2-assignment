@@ -6,7 +6,7 @@
   },
   "width": 600,
   "height": 400,
-  "data": {"url": "../income_cpi_analysis.csv"},
+  "data": {"url": "income_cpi_analysis.csv"},
   "params": [
     {
       "name": "Region_selection",

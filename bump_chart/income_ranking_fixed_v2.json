@@ -9,7 +9,7 @@
       "value": ""
     }
   ],
-  "data": {"url": "../income_cpi_analysis.csv"},
+  "data": {"url": "income_cpi_analysis.csv"},
   "transform": [
     {
       "aggregate": [{
